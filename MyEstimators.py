@@ -5,23 +5,6 @@ from sklearn.base import BaseEstimator
 from sklearn.base import RegressorMixin
 
 
-# def sin_func(self, x):
-#     l = x.shape[1]
-#
-#     def obj_func(params):
-#         func = np.sin(self.single_index(x)(params[0:l]) + params[l])
-#         return func
-#
-#     return obj_func
-
-# def sin_func(x):
-#     l = x.shape[1]
-#
-#     def obj_func(parameters):
-#         func = np.sin(single_index(x)(parameters[0:l]) + parameters[l])
-#         return func
-#
-#     return obj_func
 
 class CLS_Estimator(BaseEstimator, RegressorMixin):
 
@@ -31,6 +14,7 @@ class CLS_Estimator(BaseEstimator, RegressorMixin):
         self.method = method
         self.obj_func = obj_func
         self.params_ = None
+        self.estimated = None
 
     def single_index(self, x):
         if isinstance(x, (pd.DataFrame, np.ndarray)):
@@ -73,5 +57,5 @@ class CLS_Estimator(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X):
-        self.yhat=self.obj_func(X)(self.params_)
-        return self.yhat
+        self.estimated = self.obj_func(X)(self.params_)
+        return self.estimated
