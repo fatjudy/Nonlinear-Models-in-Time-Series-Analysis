@@ -27,22 +27,23 @@ def single_index(x):
 
 class CLS_Estimator(BaseEstimator, RegressorMixin):
 
-    def __init__(self, obj_func=None, x0=0, method='SLSQP', constraints=()):
+    def __init__(self, obj_func=None, x0=0, method='SLSQP', constraints=(), options={'maxiter':10000}):
         self.obj_func = obj_func
         self.x0 = x0
         self.method = method
         self.constraints = constraints
+        self.options = options
         self.params_ = None
 
-    def constraint_func(self, x):
-        def constraint(params):
-            con = 0
-            for j in np.arange(0, x1.shape[1]):
-                con += params[j] ** 2
-                cons = con - 1
-            return cons
+    # def constraint_func(self, x):
+    #     def constraint(params):
+    #         con = 0
+    #         for j in np.arange(0, x.shape[1]):
+    #             con += params[j] ** 2
+    #             cons = con - 1
+    #         return cons
 
-        return {'type': 'eq', 'fun': constraint}
+        # return {'type': 'eq', 'fun': constraint}
 
     def loss(self, x, y):
         def loss_func(params):
@@ -59,12 +60,15 @@ class CLS_Estimator(BaseEstimator, RegressorMixin):
             self.loss(x, y),
             x0=self.x0,
             method=self.method,
-            constraints=self.constraints
+            constraints=self.constraints,
+            options=self.options
         )
 
         #         res = self.optimizer
         if res.success:
             self.params_ = res.x
+        else:
+            raise Exception('fit failed')
         return self
 
     def predict(self, X):

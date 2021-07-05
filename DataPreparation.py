@@ -38,7 +38,7 @@ def data_clean(df, start, drop_cols=[]) -> pd.DataFrame:
     if 'm' in target[0]:
         df['time'] = pd.to_datetime(df[target[0]].astype(str), format='%Y%m')
     elif 'q' in target[0]:
-        df['time'] = [pd.to_datetime(str([target[0]])[:4]) + pd.offsets.QuarterBegin(int(str(target[0])[4:])) for x in
+        df['time'] = [pd.to_datetime(str(x)[:4]) + pd.offsets.QuarterBegin(int(str(x)[4:])) for x in
                       df['yyyyq']]
     else:
         df['time'] = [pd.to_datetime(str(target[0])[:4])]
