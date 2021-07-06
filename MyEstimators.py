@@ -27,7 +27,7 @@ def single_index(x):
 
 class CLS_Estimator(BaseEstimator, RegressorMixin):
 
-    def __init__(self, obj_func=None, x0=0, method='SLSQP', constraints=(), options={'maxiter':1000}):
+    def __init__(self, obj_func=None, x0=0, method='SLSQP', constraints=(), options={'maxiter':10000}):
         self.obj_func = obj_func
         self.x0 = x0
         self.method = method
