@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
-
+from sklearn.linear_model import LinearRegression
 
 def sample_mean(y, start, cv_outer) -> pd.DataFrame:
     """
@@ -22,6 +22,28 @@ def sample_mean(y, start, cv_outer) -> pd.DataFrame:
         sm.append(y_hat)
         mse.append(np.mean(y_hat - y_test) ** 2)
     return sm, mse
+
+
+LR = LinearRegression()
+
+
+def AR_1(y, start, cv_outer) -> pd.DataFrame:
+    """
+    :param y: pd.DataFrame, used to calculate sample mean
+    :param start: time string, time point we start to calculate sample mean
+    :param cv_outer: rules for train test split
+    :return: two lists: sample mean prediction and mse
+    """
+    AR1 = list()
+    AR1_mse = list()
+    for train_index, test_index in cv_outer.split(x):
+        # Split train and test sets
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+        # Split train and test sets
+
+        AR1.append(y_hat)
+        AR1_mse.append()
+    return AR1, AR1_mse
 
 
 fig_size = (10, 5)
