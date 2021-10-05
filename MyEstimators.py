@@ -4,27 +4,6 @@ from scipy.optimize import minimize
 from sklearn.base import BaseEstimator
 from sklearn.base import RegressorMixin
 
-
-def single_index(x):
-    if isinstance(x, (pd.DataFrame, np.ndarray)):
-        if isinstance(x, pd.DataFrame):
-            x_values = x.values
-        else:
-            pass
-    else:
-        raise Exception('wrong type')
-
-    def u(theta):
-        if len(theta) == x_values.shape[1]:
-            sum_up = [x_values[:, i] * theta[i] for i in range(x_values.shape[1])]
-            index = np.sum(sum_up, axis=0)
-        else:
-            raise Exception('wrong parameter dimension')
-        return index
-
-    return u
-
-
 class CLS_Estimator(BaseEstimator, RegressorMixin):
 
     def __init__(self, obj_func=None, x0=0, method='SLSQP', constraints=(), options={'maxiter':50000}):
@@ -43,6 +22,25 @@ class CLS_Estimator(BaseEstimator, RegressorMixin):
     #             cons = con - 1
     #         return cons
     #     return {'type': 'eq', 'fun': constraint}
+
+    # def single_index(x):
+    #     if isinstance(x, (pd.DataFrame, np.ndarray)):
+    #         if isinstance(x, pd.DataFrame):
+    #             x_values = x.values
+    #         else:
+    #             pass
+    #     else:
+    #         raise Exception('wrong type')
+    #
+    #     def u(theta):
+    #         if len(theta) == x_values.shape[1]:
+    #             sum_up = [x_values[:, i] * theta[i] for i in range(x_values.shape[1])]
+    #             index = np.sum(sum_up, axis=0)
+    #         else:
+    #             raise Exception('wrong parameter dimension')
+    #         return index
+    #
+    #     return u
 
     def loss(self, x, y):
         def loss_func(params):
