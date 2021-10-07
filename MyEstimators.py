@@ -14,34 +14,6 @@ class CLS_Estimator(BaseEstimator, RegressorMixin):
         self.options = options
         self.params_ = None
 
-    # def constraint_func(self, x):
-    #     def constraint(params):
-    #         con = 0
-    #         for j in np.arange(0, x.shape[1]):
-    #             con += params[j] ** 2
-    #             cons = con - 1
-    #         return cons
-    #     return {'type': 'eq', 'fun': constraint}
-
-    # def single_index(x):
-    #     if isinstance(x, (pd.DataFrame, np.ndarray)):
-    #         if isinstance(x, pd.DataFrame):
-    #             x_values = x.values
-    #         else:
-    #             pass
-    #     else:
-    #         raise Exception('wrong type')
-    #
-    #     def u(theta):
-    #         if len(theta) == x_values.shape[1]:
-    #             sum_up = [x_values[:, i] * theta[i] for i in range(x_values.shape[1])]
-    #             index = np.sum(sum_up, axis=0)
-    #         else:
-    #             raise Exception('wrong parameter dimension')
-    #         return index
-    #
-    #     return u
-
     def loss(self, x, y):
         def loss_func(params):
             error = np.sum((y - self.obj_func(x)(params)) ** 2)

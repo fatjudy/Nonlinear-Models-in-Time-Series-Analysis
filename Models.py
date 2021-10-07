@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
 
-import pdb
-
 param_num = None
 
 def single_index(x):
