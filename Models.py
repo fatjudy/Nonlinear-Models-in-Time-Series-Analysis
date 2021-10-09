@@ -9,10 +9,7 @@ def single_index(x):
     :return: a function of unknown parameter theta
     """
     if isinstance(x, (pd.DataFrame, np.ndarray)):
-        if isinstance(x, pd.DataFrame):
-            x_values = x.values
-        else:
-            pass
+        pass
     else:
         raise Exception('wrong type')
 
@@ -21,8 +18,8 @@ def single_index(x):
         :param theta: parameters in the single-index
         :return:
         """
-        if len(theta) == x_values.shape[1]:
-            sum_up = [x_values[:, i] * theta[i] for i in range(x_values.shape[1])]
+        if len(theta) == x.shape[1]:
+            sum_up = [x[:, i] * theta[i] for i in range(x.shape[1])]
             index = np.sum(sum_up, axis=0)
         else:
             raise Exception('wrong parameter dimension')
@@ -35,8 +32,8 @@ def sin_func(x):
                        d1 = param_num['theta'],
                        d2 = param_num['beta'],
                        extra = range(0,param_num['gamma'])):
-        func = np.sin(single_index(x.iloc[:,:d1])(params[0:d1])+params[d1+d2+extra[0]])+np.dot(
-            x.iloc[:,d1:d1+d2], params[d1:d1+d2])
+        func = np.sin(single_index(x[:,:d1])(params[0:d1])+params[d1+d2+extra[0]])+np.dot(
+            x[:,d1:d1+d2], params[d1:d1+d2])
         return func
     return objective_func
 
