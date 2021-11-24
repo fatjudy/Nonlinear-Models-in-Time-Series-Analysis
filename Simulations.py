@@ -27,7 +27,23 @@ def series_generator(length, alpha, et):
         _new = alpha * z[j] + et[j]
         z = np.append(z, [_new], axis=0)
         j += 1
-    return z
+    # return z
+    return z[1:]
+
+# et = np.random.standard_normal(100)
+# a = series_generator(100, [0.2,0.3], et)
+# len(a)
+
+# Number of gamma parameters
+extra_params = {'sin_func':1,
+               'cos_func':1,
+               'scaled_sin_func':2,
+               'scaled_cos_func':2,
+               'exp_func':2,
+               'exp_shift_func':2,
+                'poly_func':3,
+                'linear_func':2
+               }
 
 def xy_generator(parameters, sample_size, function, **options):
     """
@@ -36,13 +52,9 @@ def xy_generator(parameters, sample_size, function, **options):
     :param sample_size:
     :param function:
     :param options: stationarity, constraints
-    :return:
+    :return: a simulated dataset
     """
-
-    # Models.param_num = {'theta': parameters['theta'],
-    #                     'beta': parameters['beta'],
-    #                     'gamma': parameters['gamma']
-    #                     }
+    initial = 100
 
     # error generation
     mean = [0, 0]
@@ -72,7 +84,7 @@ def xy_generator(parameters, sample_size, function, **options):
 
     # construct the stationary variable
     st = np.random.standard_normal(sample_size + initial)
-    z = series_generator(sample_size+initial, parameters['beta'][1], st)
+    z = series_generator(sample_size+initial, 0.8, st)
 
     # construct the single-index
     u = Models.single_index(x)(parameters['theta'])
@@ -84,31 +96,33 @@ def xy_generator(parameters, sample_size, function, **options):
                         }
     i = 0
     y = np.array([[0]])
-    while i < 1100 - 1:
+
+    while i < sample_size+initial - 1:
         X_ = np.concatenate((x[i], y[i], z[i])).reshape(1, -1)
-        _new = function(X_)(parameters['theta'] + parameters['beta'] + [0.2])
+        _new = function(X_)(parameters['theta'] + parameters['beta'] + parameters['gamma'])
         y = np.append(y, [_new], axis=0)
         i += 1
 
-    x = x[initial:]
-    z = z[initial:]
-    y_lag = y[initial - 1:sample_size + initial - 1]
+    x = x[initial-1:sample_size + initial - 1]
+    z = z[initial-1:sample_size + initial - 1]
+    y_lag = y[initial-1:sample_size + initial - 1]
+    # x = x[initial:sample_size + initial]
+    # z = z[initial:sample_size + initial]
+    # y_lag = y[initial-1:sample_size + initial - 1]
     y = y[initial:]
     data = np.concatenate((x, y_lag, z,y), axis = 1)
 
-    return data
+    # return y, y_lag, x, z
+    return data, y, y_lag, x, z
 
-parameters = {'theta': [0.6, -0.8],
-              'beta': [0.8, 0.9],
-              'gamma': [0.2]
-              }
-
-# Models.param_num = {'theta': 2,
-#               'beta': 2,
-#               'gamma': 1
+# parameters = {'theta': [0.6, -0.8],
+#               'beta': [],
+#               'gamma': [0.2, 0.5, -0.5]
 #               }
-
-dt = xy_generator(parameters=parameters, sample_size=1000, function=Models.cos_func, stationary=False, constraints=True)
-dt
-
-
+# # y, ylag, x, z = xy_generator(parameters = parameters, sample_size=100, function=Models.sin_func)
+# data, y, ylag, x, z = xy_generator(parameters = parameters, sample_size=100, function=Models.sin_func)
+# #
+# #
+# # u = Models.single_index(x)([0.6, -0.8])
+# plt.plot(z)
+# plt.show()
